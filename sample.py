@@ -58,7 +58,7 @@ def main():
     pyr2.scale = vector3(10, 10, 10)
     pyr2.position = vector3(10, 4, 8)
     pyr2.mesh = Mesh.create_Pyramid((1, 1, 1))
-    pyr2.material = Material(color(1,0,1,0), "PyramidMaterial")
+    pyr2.material = Material(color(1,1,1,0), "PyramidMaterial")
     scene.add_object(pyr2)
 
     # Timer
