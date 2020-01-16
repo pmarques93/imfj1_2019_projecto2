@@ -26,12 +26,14 @@ class Mesh:
                 vout = vout @ matrix
                 tpoly.append( ( screen.get_width() * 0.5 + vout[0] / vout[3], screen.get_height() * 0.5 - vout[1] / vout[3]) )
 
-
-            #draws outline 
+            
             pygame.draw.polygon(screen, c, tpoly, material.line_width)
-            #or
+            
+
             #draws filled face
             #pygame.draw.polygon(screen, c, tpoly, material.fill)
+
+
 
 
     @staticmethod

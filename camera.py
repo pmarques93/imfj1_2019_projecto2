@@ -8,7 +8,7 @@ class Camera(Object3d):
         self.ortho = ortho
         self.res_x = res_x
         self.res_y = res_y
-        self.fov = math.radians(60)
+        self.fov = math.radians(30)
 
     def get_projection_matrix(self):
         self.proj_matrix = np.zeros((4, 4))
@@ -39,7 +39,7 @@ class Camera(Object3d):
         rotation_matrix = np.identity(4)
         rotation_matrix[0][0] = qrot[0][0]
         rotation_matrix[0][1] = qrot[0][1]
-        rotation_matrix[0][2] = qrot[0][2]
+        rotation_matrix[2][2] = qrot[0][2]
         rotation_matrix[1][0] = qrot[1][0]
         rotation_matrix[1][1] = qrot[1][1]
         rotation_matrix[1][2] = qrot[1][2]
