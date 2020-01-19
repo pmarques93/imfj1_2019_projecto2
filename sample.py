@@ -34,7 +34,6 @@ def main():
     cube1.position = vector3(-2, 1, 11)
     cube1.mesh = Mesh.create_Cube((1, 1, 1))
     cube1.material = Material(color(0,1,0,1), "CubeMaterial")
-    #scene.add_object(cube1)
 
     # Create a cube and place it in a scene
     cube2 = Object3d("Cube2")
@@ -42,7 +41,6 @@ def main():
     cube2.position = vector3(-2, 3.5, 18)
     cube2.mesh = Mesh.create_Cube((1, 1, 1))
     cube2.material = Material(color(1,1,0,1), "CubeMaterial")
-    #scene.add_object(cube2)
 
     # Create a pyramid and place it in a scene
     pyr1 = Object3d("Pyramid")
@@ -50,7 +48,6 @@ def main():
     pyr1.position = vector3(2, 1, 11)
     pyr1.mesh = Mesh.create_Pyramid((1, 1, 1))
     pyr1.material = Material(color(1,0,1,0), "PyramidMaterial")
-    #scene.add_object(pyr1)
 
     # Create a pyramid and place it in a scene
     pyr2 = Object3d("Pyramid")
@@ -58,7 +55,6 @@ def main():
     pyr2.position = vector3(10, 5, 16)
     pyr2.mesh = Mesh.create_Pyramid((1, 1, 1))
     pyr2.material = Material(color(1,1,1,0), "PyramidMaterial")
-    #scene.add_object(pyr2)
 
     objList = [cube1, cube2, pyr1, pyr2]
 
@@ -110,7 +106,8 @@ def main():
                 if (event.key == pygame.K_s):
                     sKey = False
 
-        # não faz render que está atrás da câmera
+
+        # Stop objects that are behind the camera from being renderered
         for obj in objList: #para todos os objectos na lista
             objN = obj.forward() - scene.camera.position    # normal da face do obj no sentido da camera
             objN.normalize()                                # normaliza
@@ -119,11 +116,20 @@ def main():
             if dot_product(objN,cameraV) > 0:   # se o p.i. for maior que 0
                 if obj not in scene.objects:    # caso os objectos nao estejam na scene.objects
                     scene.add_object(obj)       # faz add do objecto para ser renderizado
+            
+
+                    # Implement filled geometry, replacing the wireframe
+                    # para os objects na scene, se a distância for menor que os restantes, faz remove da lista de render
+                    # e antes deste *for*, volta a desenhá-los por cima
+                    for obj2 in scene.objects: 
+                        if obj2.position.magnitude() - scene.camera.position.magnitude() < obj.position.magnitude() - scene.camera.position.magnitude():
+                            scene.remove_object(obj2)
+
             else:                               # se o p.i. for menor que 0
                 if obj in scene.objects:        # caso o objecto esteja na scene.objects
                     scene.remove_object(obj)    # remove o objecto
-                
 
+        
         # walking keys
         # nunca deixa o Y da camera mexer
         # usa os métodos left, right, forward, back para saber para onde a câmera est+a virada
