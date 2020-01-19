@@ -13,7 +13,6 @@ from color import *
 def main():
     # Initialize pygame, with the default parameters
     pygame.init()
-    pygame.mouse.set_visible(False)
 
     # Define the size/resolution of our window
     res_x = 800
@@ -27,18 +26,15 @@ def main():
     scene.camera = Camera(False, res_x, res_y)
 
     # Sets Camera Position
-    scene.camera.position -= vector3(0,-1,1)
-    
-    #empty list for objects
-    objectList = []
-    
+    scene.camera.position -= vector3(0,-1,0)
+
     # Create a cube and place it in a scene
     cube1 = Object3d("Cube")
     cube1.scale = vector3(2, 2, 2)
     cube1.position = vector3(-2, 1, 11)
     cube1.mesh = Mesh.create_Cube((1, 1, 1))
     cube1.material = Material(color(0,1,0,1), "CubeMaterial")
-    scene.add_object(cube1)
+    #scene.add_object(cube1)
 
     # Create a cube and place it in a scene
     cube2 = Object3d("Cube2")
@@ -46,7 +42,7 @@ def main():
     cube2.position = vector3(-2, 3.5, 18)
     cube2.mesh = Mesh.create_Cube((1, 1, 1))
     cube2.material = Material(color(1,1,0,1), "CubeMaterial")
-    scene.add_object(cube2)
+    #scene.add_object(cube2)
 
     # Create a pyramid and place it in a scene
     pyr1 = Object3d("Pyramid")
@@ -54,7 +50,7 @@ def main():
     pyr1.position = vector3(2, 1, 11)
     pyr1.mesh = Mesh.create_Pyramid((1, 1, 1))
     pyr1.material = Material(color(1,0,1,0), "PyramidMaterial")
-    scene.add_object(pyr1)
+    #scene.add_object(pyr1)
 
     # Create a pyramid and place it in a scene
     pyr2 = Object3d("Pyramid")
@@ -62,12 +58,9 @@ def main():
     pyr2.position = vector3(10, 5, 16)
     pyr2.mesh = Mesh.create_Pyramid((1, 1, 1))
     pyr2.material = Material(color(1,1,1,0), "PyramidMaterial")
-    scene.add_object(pyr2)
+    #scene.add_object(pyr2)
 
-    objectList.append(cube1)
-    objectList.append(cube2)
-    objectList.append(pyr1)
-    objectList.append(pyr2)
+    objList = [cube1, cube2, pyr1, pyr2]
 
     #angle
     angle = 15
@@ -84,12 +77,10 @@ def main():
     dKey = False
     wKey = False
     sKey = False
-    qKey = False
-    eKey = False
 
     # keys list
     keys = [
-        aKey, dKey, wKey, sKey, qKey, eKey
+        aKey, dKey, wKey, sKey
     ]
 
     # Game loop, runs forever
@@ -98,7 +89,7 @@ def main():
         for event in pygame.event.get():
             # Checks if the user closed the window
             if (event.type == pygame.KEYDOWN):
-                if event.key == pygame.K_ESCAPE:
+                if (event.key == pygame.K_ESCAPE):
                     return
                 if (event.key == pygame.K_a):   
                     aKey = True
@@ -108,10 +99,6 @@ def main():
                     wKey = True
                 if (event.key == pygame.K_s):
                     sKey = True
-                if (event.key == pygame.K_q):
-                    qKey = True
-                if (event.key == pygame.K_e):
-                    eKey = True
 
             elif event.type == pygame.KEYUP:
                 if (event.key == pygame.K_a):   
@@ -122,31 +109,47 @@ def main():
                     wKey = False
                 if (event.key == pygame.K_s):
                     sKey = False
-                if (event.key == pygame.K_q):
-                    qKey = False
-                if (event.key == pygame.K_e):
-                    eKey = False
 
-        
+        # não faz render que está atrás da câmera
+        for obj in objList: #para todos os objectos na lista
+            objN = obj.forward() - scene.camera.position    # normal da face do obj no sentido da camera
+            objN.normalize()                                # normaliza
+            cameraV = scene.camera.forward()    #obtem o vetor para onde a camera está virada
+
+            if dot_product(objN,cameraV) > 0:   # se o p.i. for maior que 0
+                if obj not in scene.objects:    # caso os objectos nao estejam na scene.objects
+                    scene.add_object(obj)       # faz add do objecto para ser renderizado
+            else:                               # se o p.i. for menor que 0
+                if obj in scene.objects:        # caso o objecto esteja na scene.objects
+                    scene.remove_object(obj)    # remove o objecto
+                
+
         # walking keys
+        # nunca deixa o Y da camera mexer
+        # usa os métodos left, right, forward, back para saber para onde a câmera est+a virada
+        if scene.camera.position.y != 1:
+            scene.camera.position.y = 1
         if aKey:
-            scene.camera.position += vector3(-0.02,0,0)
+            scene.camera.position += scene.camera.left() * 0.1
         if dKey:
-            scene.camera.position += vector3(0.02,0,0)
+            scene.camera.position += scene.camera.right() * 0.1
         if wKey:
-            scene.camera.position += vector3(0,0,0.02)
+            scene.camera.position += scene.camera.forward() * 0.1
         if sKey:
-            scene.camera.position += vector3(0,0,-0.02)
+            scene.camera.position += scene.camera.back() * 0.1
+
 
         # Rotates the object, considering the time passed (not linked to frame rate)
         q = from_rotation_vector((axis * math.radians(angle) * delta_time).to_np3())
 
-        #locks mouse and its position
+        
+        #locks mouse and gives its position
         pygame.event.set_grab(True)
+        pygame.mouse.set_visible(False)
         mp = pygame.mouse.get_rel()
 
         # get mouse pos (to rotate camera)
-        if (mp[0]) < 0:#quando olha para a esquerda
+        if (mp[0]) < 0: #quando olha para a esquerda
             axis = vector3(0,1,0)   
             scene.camera.rotation = q * scene.camera.rotation
 
@@ -177,7 +180,6 @@ def main():
         if (mp[0]) < 0 and (mp[1]) < 0: #quando olha para esquerda e para cima
             axis = vector3(1,1,0)   
             scene.camera.rotation = q * scene.camera.rotation
-
         
         # Clears the screen with a very dark blue (0, 0, 20)
         screen.fill((0,0,0))

@@ -27,26 +27,22 @@ class Mesh:
                 tpoly.append( ( screen.get_width() * 0.5 + vout[0] / vout[3], screen.get_height() * 0.5 - vout[1] / vout[3]) )
 
             
-            pygame.draw.polygon(screen, c, tpoly, material.line_width)
-            
-
             #draws filled face
-            #pygame.draw.polygon(screen, c, tpoly, material.fill)
-
-
-
+            pygame.draw.polygon(screen, (20, 20, 20), tpoly, material.fill)
+            #draws wireframe
+            pygame.draw.polygon(screen, c, tpoly, material.line_width)
 
     @staticmethod
     def create_Cube(size, mesh = None):
         if (mesh == None):
             mesh = Mesh("Cube")
-
-        Mesh.create_square(vector3(-size[0] * 0.5, 0, 0), vector3(0, -size[1] * 0.5, 0), vector3(0, 0, size[2] * 0.5), mesh)
+        #lados
+        Mesh.create_square(vector3(size[0] * 0.5, 0, 0), vector3(0, -size[1] * 0.5, 0), vector3(0, 0, size[2] * 0.5), mesh)
         Mesh.create_square(vector3(-size[0] * 0.5, 0, 0), vector3(0,  size[1] * 0.5, 0), vector3(0, 0, size[2] * 0.5), mesh)
-
+        #cima baixo
         Mesh.create_square(vector3(0,  size[1] * 0.5, 0), vector3(size[0] * 0.5, 0), vector3(0, 0, size[2] * 0.5), mesh)
         Mesh.create_square(vector3(0, -size[1] * 0.5, 0), vector3(-size[0] * 0.5, 0), vector3(0, 0, size[2] * 0.5), mesh)
-
+        #frente tras
         Mesh.create_square(vector3(0, 0,  size[2] * 0.5), vector3(-size[0] * 0.5, 0), vector3(0, size[1] * 0.5, 0), mesh)
         Mesh.create_square(vector3(0, 0, -size[2] * 0.5), vector3( size[0] * 0.5, 0), vector3(0, size[1] * 0.5, 0), mesh)
         
@@ -94,16 +90,35 @@ class Mesh:
         squares.append(origin + axis0 - axis1)
         squares.append(origin - axis0 - axis1)
 
-
-        #v1 = p2 - p1
-        #v2 = p3 - p1
-
-        #n = cross_product(v1,v2)
-    
-        #cameraVec = vector3(0,0,1)
-
-        #if dot_product(n, cameraVec) > 0:
-
         mesh.polygons.append(squares)
+        '''
+        p1 = (origin - axis0 + axis1)
+        p2 = (origin + axis0 + axis1)
+        p3 = (origin + axis0 - axis1)
+        p4 = (origin - axis0 - axis1)
+
+        squares.append(p1)
+        squares.append(p2)
+        squares.append(p3)
+        squares.append(p4)
+
+        v1 = p2 - p1
+        v2 = p3 - p2
+
+        cp = cross_product(v1,v2)
+        cp.normalize()
+
+        cameraDir = vector3(-1,0,1)
+
+        for sq in squares:
+            if dot_product(cp, cameraDir) > 0:
+                mesh.polygons.append(squares)
+                print(dot_product)
+        for sq in squares:
+            if dot_product(cp, cameraDir) < 0:
+                mesh.polygons.append(squares)
+        '''
+
+        
 
         return mesh
