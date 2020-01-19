@@ -22,9 +22,11 @@ Após isto, aproveitei código da parte 1 para criar pirâmides e código origin
 Depois dos passos anteriores, coloquei o rato "preso" à janela e usei a posição do mesmo de modo a alterar os valores 
 do *axis* e modificar a rotação da câmera.
 
-Criei métodos adicionais no *object3d.py* de modo a ter acesso a todos os vetores à volta de um objecto. Acabei por usar estes métodos para a movimentação da câmera.
+Criei métodos adicionais no *object3d.py* de modo a ter acesso a todos os vetores à volta de um objecto. Acabei por usar estes métodos para a movimentação da câmera. Criei também um método *remove_object()* na *scene.py*.
 
 Após isto, utilizei uma lista (*objList*) em que foram adicionados os objectos criados, de modo a escolher quais deles são adicionados à lista de objectos que vão ser *renderizados* (*scene.objects*). Para escolher quais são adicionados, utilizo a normal do objecto (para todos os objectos com um *for*) e retiro a posição da câmera, de modo a que a normal esteja sempre virada para o lado contrário da mesma. De seguida, faço o produto interno entre essa mesma normal e o vector da câmera. Caso o produto interno seja maior que 0, o objecto é renderizado. Para esta fase do trabalho contei com a ajuda do colega Marco Domingos.
+
+Tendo este último passo realizado, aproveitei o mesmo *for* para calcular a distância entre todos os objectos, fazendo com que os objectos com menor distância sejam adicionandos no fim da lista *scene.objects*. Assim, sendo que são adicioados apenas no fim, o *rendering* dos mesmos vai ser feito por cima dos objectos mais distantes.
 
 ---
 
