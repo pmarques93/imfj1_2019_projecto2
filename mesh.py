@@ -25,12 +25,12 @@ class Mesh:
                 vout = v.to_np4()
                 vout = vout @ matrix
                 tpoly.append( ( screen.get_width() * 0.5 + vout[0] / vout[3], screen.get_height() * 0.5 - vout[1] / vout[3]) )
-
             
             #draws filled face
             pygame.draw.polygon(screen, (20, 20, 20), tpoly, material.fill)
             #draws wireframe
             pygame.draw.polygon(screen, c, tpoly, material.line_width)
+            
 
     @staticmethod
     def create_Cube(size, mesh = None):
@@ -90,35 +90,6 @@ class Mesh:
         squares.append(origin + axis0 - axis1)
         squares.append(origin - axis0 - axis1)
 
-        mesh.polygons.append(squares)
-        '''
-        p1 = (origin - axis0 + axis1)
-        p2 = (origin + axis0 + axis1)
-        p3 = (origin + axis0 - axis1)
-        p4 = (origin - axis0 - axis1)
-
-        squares.append(p1)
-        squares.append(p2)
-        squares.append(p3)
-        squares.append(p4)
-
-        v1 = p2 - p1
-        v2 = p3 - p2
-
-        cp = cross_product(v1,v2)
-        cp.normalize()
-
-        cameraDir = vector3(-1,0,1)
-
-        for sq in squares:
-            if dot_product(cp, cameraDir) > 0:
-                mesh.polygons.append(squares)
-                print(dot_product)
-        for sq in squares:
-            if dot_product(cp, cameraDir) < 0:
-                mesh.polygons.append(squares)
-        '''
-
-        
+        mesh.polygons.append(squares) 
 
         return mesh
