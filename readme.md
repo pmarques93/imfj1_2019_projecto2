@@ -26,12 +26,10 @@ Criei métodos adicionais no *object3d.py* de modo a ter acesso a todos os vetor
 
 Após isto, utilizei uma lista (*objList*) em que foram adicionados os objectos criados, de modo a escolher quais deles são adicionados à lista de objectos que vão ser *renderizados* (*scene.objects*). Para escolher quais são adicionados, utilizo a normal do objecto (para todos os objectos com um *for*) e retiro a posição da câmera, de modo a que a normal esteja sempre virada para o lado contrário da mesma. De seguida, faço o produto interno entre essa mesma normal e o vector da câmera. Caso o produto interno seja maior que 0, o objecto é renderizado. Para esta fase do trabalho contei com a ajuda do colega Marco Domingos.
 
-Tendo este último passo realizado, aproveitei o mesmo *for* para calcular a distância entre todos os objectos, fazendo com que os objectos com menor distância sejam adicionandos no fim da lista *scene.objects*. Assim, sendo que são adicioados apenas no fim, o *rendering* dos mesmos vai ser feito por cima dos objectos mais distantes.
-
----
+Tendo este último passo realizado, avancei para o *Implement filled geometry*. Aproveitei o *for* criado no passo anterior para calcular a distância entre todos os objectos, fazendo com que os objectos com menor distância sejam adicionandos no fim da lista *scene.objects*. Assim, sendo que são adicioados apenas no fim, o *rendering* dos mesmos vai ser feito por cima dos objectos mais distantes.
 
 ## Dificuldades
-
+Quanto às dificuldades que encontrei durante o desenvolvimento da parte 2, quanto ao desenvolvimento das formas não existiram dificuldades, sendo que o processo de criação foi semelhante à parte 1. Em relação ao movimento com o rato, surgiram dificuldades em perceber o porquê da rotação da câmera no eixo Z. Após estes passos tive bastantes dificuldades em perceber como aplicar o produto interno nos objectos de modo a que desaparecem por trás da câmera. No último passo, *Implement filled geometry*, apesar de não existirem dificuldades, também não consegui aplicar a teoria na perfeição, sendo que os objectos são desenhados consoante a distância apenas quando o programe é executado inicialmente.
 
 ---
 
