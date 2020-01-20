@@ -7,7 +7,7 @@
 ## Trabalho Realizado
 
 Para esta segunda parte do projecto, foram criadas algumas formas com preenchimento, foram implementas teclas de modo a
-conseguir movimentar a câmera, foi implementado o controlo da câmera com o rato e também o *rendering* apenas de formas visíveis.
+conseguir movimentar a câmera, foi implementado o controlo da câmera com o rato, foi implementado o *rendering* apenas de formas visíveis e o *filled geometry*.
 
 ### Contribuições
 ### Pedro Marques - (por ordem de trabalho realizado)
